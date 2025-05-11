@@ -17,7 +17,7 @@ class CoursesController < ApplicationController
   # this is not a normal post route
   # it simply adds the course to the user's courses
   def create
-    @course = Course.find(params[:id])
+    @course = Course.find(params[:course_id])
     current_user.courses << @course
     redirect_to courses_path
   end

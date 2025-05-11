@@ -1,4 +1,17 @@
-<h1>Trova i tuoi corsi</h1>
+<h1>Corsi</h1>
+<!-- display user courses -->
+<h2>I tuoi corsi</h2>
+<turbo-frame id="user-courses">
+  <% if current_user.courses.any? %>
+    <ul>
+      <% current_user.courses.each do |course| %>
+        <li><%= course.name %></li>
+      <% end %>
+    </ul>
+  <% end %>
+</turbo-frame>
+<!-- search form -->
+<h2>Cerca corsi</h2>
 <%= form_with url: courses_path, method: :get, data: { turbo_frame: "courses" } do |f| %>
   <div class="field">
     <%= f.label :search, "Cerca corso" %>
@@ -6,11 +19,18 @@
   </div>
   <%= f.submit "Cerca" %>
 <% end %>
-<turbo-frame id="courses">
+<!-- display courses -->
+<turbo-frame id="courses" target="_top">
   <% if @courses.any? %>
     <ul>
       <% @courses.each do |course| %>
-        <li><%= course.name %></li>
+        <li>
+          <%= course.name %>
+          <form action="<%= courses_path %>" method="post">
+            <%= hidden_field_tag :course_id, course.id %>
+            <%= submit_tag "Partecipa" %>
+          </form>
+        </li>
       <% end %>
     </ul>
   <% end %>
