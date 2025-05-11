@@ -18,7 +18,11 @@ class CoursesController < ApplicationController
   # it simply adds the course to the user's courses
   def create
     @course = Course.find(params[:course_id])
-    current_user.courses << @course
-    redirect_to courses_path
+    if current_user.courses.include?(@course)
+      redirect_to courses_path, alert: "Hai già aggiunto questo corso"
+    else
+      current_user.courses << @course
+      redirect_to courses_path, notice: "Corso aggiunto"
+    end
   end
 end
