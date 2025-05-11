@@ -5,6 +5,9 @@ class Course < ApplicationRecord
   validates :server_id, presence: true, uniqueness: true
   validates :name, presence: true
 
+  has_many :attendances
+  has_many :users, through: :attendances
+
   SCRAPER_URL = URI("http://localhost:3000/scraper/courses")
 
   def self.sync!
