@@ -1,0 +1,17 @@
+<h1>Trova i tuoi corsi</h1>
+<%= form_with url: courses_path, method: :get, data: { turbo_frame: "courses" } do |f| %>
+  <div class="field">
+    <%= f.label :search, "Cerca corso" %>
+    <%= f.text_field :search, value: params[:search] %>
+  </div>
+  <%= f.submit "Cerca" %>
+<% end %>
+<turbo-frame id="courses">
+  <% if @courses.any? %>
+    <ul>
+      <% @courses.each do |course| %>
+        <li><%= course.name %></li>
+      <% end %>
+    </ul>
+  <% end %>
+</turbo-frame>
