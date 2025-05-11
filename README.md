@@ -28,10 +28,19 @@ trovato il modo, perfetto!
 ogni lezione è rappresentata nel json ritornato da grid_call.php
 nella proprietà "celle", un array, ci sono varie proprietà, tra cui:
 - id (buono! si può usare per verificare cambiamenti di orario e posizione)
-- codice insegnamento -> da usare per linkare i corsi alle lezioni
-- name_original (nome insegnamento completo)
+- (non serve) codice insegnamento -> da usare per linkare i corsi alle lezioni -> forse ha senso direttamente assegnarlo al corso? vabbe lo inserisco e sticazzi
+- (non serve) name_original (nome insegnamento completo)
 - data
 - aula
 - ora_inizio
 - ora_fine
 - docente
+
+attualmente le uniche cose che vengono salvate sono i corsi
+salvare tutte le lezioni di tutti i corsi sarebbe un parto
+meglio fare così:
+- quando uno studente si iscrive a un corso, salviamo tutte le lezioni da oggi a un mese di distanza
+- come fare?
+- vedi course create action
+- a meno che il corso abbia già studenti, inizia a fare il fetch di tutte le lezioni, successivamente fai tutto il resto
+- processo di fetch delle lezioni. come funziona? prendi celle, per ognuna di esse, se il codice_insegnamento = course.code allora prendi tutti i dati che ti interessando e builda la lesson sul corso. grande!

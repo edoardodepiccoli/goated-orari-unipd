@@ -20,7 +20,7 @@
   <body>
     <nav>
       <div>
-        <%= link_to "Lezioni", courses_path %>
+        <%= link_to "Lezioni", lessons_path %>
         <%= link_to "Corsi", courses_path %>
       </div>
       <div>
@@ -32,6 +32,11 @@
         <% end %>
       </div>
     </nav>
-    <%= yield %>
+    <main>
+      <% flash.each do |key, message| %>
+        <%= content_tag :div, message, class: "flash #{key}" %>
+      <% end %>
+      <%= yield %>
+    </main>
   </body>
 </html>
