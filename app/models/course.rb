@@ -2,7 +2,7 @@ require "net/http"
 require "json"
 
 class Course < ApplicationRecord
-  validates :server_id, presence: true, uniqueness: true
+  validates :code, presence: true, uniqueness: true
   validates :name, presence: true
 
   has_many :attendances
@@ -15,7 +15,7 @@ class Course < ApplicationRecord
     courses = JSON.parse(response)
 
     courses.each do |course|
-      find_or_initialize_by(server_id: course["valore"]).tap do |c|
+      find_or_initialize_by(code: course["valore"]).tap do |c|
         c.name = course["label"]
         c.save!
       end
