@@ -8,6 +8,8 @@ class Course < ApplicationRecord
   has_many :attendances
   has_many :users, through: :attendances
 
+  has_many :lessons
+
   SCRAPER_URL = URI("http://localhost:3000/scraper/courses")
 
   def self.sync!
