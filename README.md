@@ -10,3 +10,28 @@ i would like to structure it like this
 - the user can then add their favourite courses to its account, then check on the lessons schedule and get a clear cards view of the courses. they can select the time period with a start and finish date. something similar but well working and easy to implement and use
 - in order for the user to select their courses, we want them to be able to fuzzy search them by name. then, we want to actually set the course to its favourites. i was wondering how to make the search experience a good and smooth one. i initially thought to prepopulate a select field with all the options of a course, or maybe a datalist with various reccomends, but then i thought that the courses are literally thousands and that could make front end performance shitty and db queries a lot for each course search. i want to ask you the best way to go about it. maybe using hotwire, debouncing or something like that while keeping it stupid simple and highly functional for both me and the users
 - do the same for the exams feature but think about this later
+
+come fare a far sì che quando cambiano le lezioni l'utente viene notificato?
+si potrebbe fare che un corso ha più lezioni, sarebbe figo registrare tutte quelle dell'anno, in modo da rendere la ricerca più veloce
+
+c'è da trovare il modo per
+- capire quando le lezioni vengono cambiate
+- trovare quali utenti sono iscritti ai corsi che hanno quelle lezioni
+- comunicare il cambiamento delle lezioni via mail
+
+si potrebbe fare in modo che
+un corso ha più lezioni
+una lezione appartiene solo a un corso
+ogni mezz'ora si aggiornano le lezioni e si comunicano i cambiamenti
+
+trovato il modo, perfetto!
+ogni lezione è rappresentata nel json ritornato da grid_call.php
+nella proprietà "celle", un array, ci sono varie proprietà, tra cui:
+- id (buono! si può usare per verificare cambiamenti di orario e posizione)
+- codice insegnamento -> da usare per linkare i corsi alle lezioni
+- name_original (nome insegnamento completo)
+- data
+- aula
+- ora_inizio
+- ora_fine
+- docente

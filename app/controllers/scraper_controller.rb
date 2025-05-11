@@ -16,6 +16,7 @@ class ScraperController < ApplicationController
 
     url = URI("https://agendastudentiunipd.easystaff.it/grid_call.php")
 
+    # test with these [ "EC767926", "EC767933" ]
     payload = {
       "view" => "easycourse",
       "form-type" => "attivita",

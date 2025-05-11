@@ -19,17 +19,18 @@
   </head>
   <body>
     <nav>
-      <% if user_signed_in? %>
-        <%= image_tag "user-icon.png",
-        alt: "User icon",
-        class: "user-icon",
-        width: 32,
-        height: 32 %>
-        <%= link_to "Logout", destroy_user_session_path, data: { turbo_method: :delete } %>
-      <% else %>
-        <%= link_to "Signup", new_user_registration_path %>
-        <%= link_to "Login", new_user_session_path %>
-      <% end %>
+      <div>
+        <%= link_to "Lezioni", courses_path %>
+        <%= link_to "Corsi", courses_path %>
+      </div>
+      <div>
+        <% if user_signed_in? %>
+          <%= link_to "Logout", destroy_user_session_path, data: { turbo_method: :delete } %>
+        <% else %>
+          <%= link_to "Signup", new_user_registration_path %>
+          <%= link_to "Login", new_user_session_path %>
+        <% end %>
+      </div>
     </nav>
     <%= yield %>
   </body>
