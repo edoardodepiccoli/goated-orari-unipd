@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_12_202925) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_12_210032) do
   create_table "attendances", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "course_id", null: false
@@ -34,6 +34,22 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_12_202925) do
     t.integer "course_id", null: false
     t.string "code", null: false
     t.index ["course_id"], name: "index_exam_course_codes_on_course_id"
+  end
+
+  create_table "exams", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "server_id"
+    t.string "name"
+    t.string "teacher"
+    t.string "site"
+    t.string "room"
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.date "date"
+    t.string "professor_email"
+    t.integer "course_id", null: false
+    t.index ["course_id"], name: "index_exams_on_course_id"
   end
 
   create_table "lessons", force: :cascade do |t|
@@ -65,5 +81,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_12_202925) do
   add_foreign_key "attendances", "courses"
   add_foreign_key "attendances", "users"
   add_foreign_key "exam_course_codes", "courses"
+  add_foreign_key "exams", "courses"
   add_foreign_key "lessons", "courses"
 end
