@@ -1,0 +1,2 @@
+class ExamCourseCode < ApplicationRecord
+end
