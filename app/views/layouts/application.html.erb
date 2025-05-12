@@ -21,17 +21,23 @@
     <nav class="p-4 bg-gray-100 border-b-4 border-black">
       <div class="flex items-center justify-between max-w-screen-md mx-auto">
         <div class="space-x-2">
+          <% if params[:controller] == "courses" %>
+            <!-- display selected button -->
+            <%= link_to "Corsi", courses_path, class: "inline-block font-bold text-black px-4 py-2 rounded-sm bg-[#9B1C12] text-white border-2 border-black translate-x-[4px] translate-y-[4px] shadow-none" %>
+          <% else %>
+            <%= link_to "Corsi", courses_path, class: "inline-block font-bold text-black px-4 py-2 rounded-sm bg-[#9B1C12] text-white border-2 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-150" %>
+          <% end %>
           <% if params[:controller] == "lessons" %>
             <!-- display selected button (this is starting to get really messy... -->
             <%= link_to "Lezioni", lessons_path, class: "inline-block font-bold text-black px-4 py-2 rounded-sm bg-[#9B1C12] text-white border-2 border-black translate-x-[4px] translate-y-[4px] shadow-none" %>
           <% else %>
             <%= link_to "Lezioni", lessons_path, class: "inline-block font-bold text-black px-4 py-2 rounded-sm bg-[#9B1C12] text-white border-2 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-150" %>
           <% end %>
-          <% if params[:controller] == "courses" %>
+          <% if params[:controller] == "exams" %>
             <!-- display selected button -->
-            <%= link_to "Corsi", courses_path, class: "inline-block font-bold text-black px-4 py-2 rounded-sm bg-[#9B1C12] text-white border-2 border-black translate-x-[4px] translate-y-[4px] shadow-none" %>
+            <%= link_to "Esami", exams_path, class: "inline-block font-bold text-black px-4 py-2 rounded-sm bg-[#9B1C12] text-white border-2 border-black translate-x-[4px] translate-y-[4px] shadow-none" %>
           <% else %>
-            <%= link_to "Corsi", courses_path, class: "inline-block font-bold text-black px-4 py-2 rounded-sm bg-[#9B1C12] text-white border-2 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-150" %>
+            <%= link_to "Esami", exams_path, class: "inline-block font-bold text-black px-4 py-2 rounded-sm bg-[#9B1C12] text-white border-2 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-150" %>
           <% end %>
         </div>
         <div class="space-x-2">

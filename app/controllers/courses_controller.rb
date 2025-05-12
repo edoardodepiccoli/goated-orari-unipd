@@ -30,6 +30,10 @@ class CoursesController < ApplicationController
       @course.create_lessons
     end
 
+    unless @course.exams.any?
+      @course.create_exams
+    end
+
     current_user.courses << @course
     redirect_to courses_path, notice: "Corso aggiunto"
   end

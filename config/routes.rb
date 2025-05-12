@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   # courses routes
   resources :courses, only: [:index, :create, :destroy]
   resources :lessons, only: [:index]
-
+  resources :exams, only: [:index]
   # rails health check
   get "up" => "rails/health#show", as: :rails_health_check
 
