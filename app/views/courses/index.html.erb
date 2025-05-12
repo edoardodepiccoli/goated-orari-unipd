@@ -1,45 +1,49 @@
-<h1>Corsi</h1>
 <!-- display user courses -->
-<h2>I tuoi corsi salvati</h2>
+<h2 class="text-2xl font-bold">I tuoi corsi salvati</h2>
 <turbo-frame id="user-courses" target="_top">
   <% if current_user.courses.any? %>
-    <ul>
+    <ul class="flex flex-col gap-2 mt-4">
       <% current_user.courses.each do |course| %>
-        <li><%= course.name %> <%= link_to "Rimuovi", course_path(course), data: { turbo_method: :delete } %></li>
+        <li class="flex flex-col gap-2 px-4 py-4 border-2 border-black rounded-sm shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
+          <span class="font-medium"><%= course.name.split(" - ").first %></span>
+          <span class="text-sm text-gray-600"><%= course.name %></span>
+          <span><%= link_to "Rimuovi", course_path(course), data: { turbo_method: :delete }, class: "text-[#9B1C12] underline" %></span>
+        </li>
       <% end %>
     </ul>
   <% else %>
-    <p>Non hai salvato nessun corso</p>
+    <p class="text-gray-600">Non hai salvato nessun corso</p>
   <% end %>
 </turbo-frame>
 <!-- search form -->
-<h2>Cerca corsi</h2>
-<%= form_with url: courses_path, method: :get, data: { turbo_frame: "courses" } do |f| %>
-  <div class="field">
-    <%= f.label :search, "Cerca corso" %>
-    <%= f.text_field :search, value: params[:search] %>
+<h2 class="mt-8 text-2xl font-bold">Salva un corso</h2>
+<%= form_with url: courses_path, method: :get, data: { turbo_frame: "courses" }, class: "flex flex-col gap-4" do |f| %>
+  <div class="w-full field">
+    <%= f.label :search, "Cerca corso", class: "block mb-2" %>
+    <%= f.text_field :search, value: params[:search], placeholder: "Inserisci il nome del corso...", class: "w-full border-b-2 border-black" %>
   </div>
-  <%= f.submit "Cerca" %>
+  <%= f.submit "Cerca", class: "w-full border-2 border-black py-2 px-4 hover:bg-black hover:text-white active:bg-black active:text-white" %>
 <% end %>
 <!-- display courses -->
-<turbo-frame id="courses" target="_top">
+<turbo-frame id="courses" target="_top" class="mt-6">
   <% if @courses.any? %>
-    <ul>
+    <ul class="flex flex-col gap-2 mt-4">
       <% @courses.each do |course| %>
-        <li>
-          <%= course.name %>
-          <form action="<%= courses_path %>" method="post">
+        <li class="flex flex-col gap-2 px-4 py-4 border-2 border-black rounded-sm shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
+          <span class="font-medium"><%= course.name.split(" - ").first %></span>
+          <span class="text-sm text-gray-600"><%= course.name %></span>
+          <%= form_with url: courses_path, method: :post, class: "mt-2" do |f| %>
             <%= hidden_field_tag :course_id, course.id %>
-            <%= submit_tag "Salva Corso" %>
-          </form>
+            <%= f.submit "Salva Corso", class: "w-full border-2 border-black py-2 px-4 hover:bg-black hover:text-white active:bg-black active:text-white" %>
+          <% end %>
         </li>
       <% end %>
     </ul>
   <% else %>
     <% if params[:search].present? %>
-      <p>Nessun corso trovato...</p>
+      <p class="mt-2 text-gray-600">Nessun corso trovato...</p>
     <% else %>
-      <p>Cerca qualche corso per salvarlo</p>
+      <p class="mt-2 text-gray-600">Cerca qualche corso per salvarlo...</p>
     <% end %>
   <% end %>
 </turbo-frame>
