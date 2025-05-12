@@ -1,13 +1,15 @@
 <h1>Corsi</h1>
 <!-- display user courses -->
-<h2>I tuoi corsi</h2>
-<turbo-frame id="user-courses">
+<h2>I tuoi corsi salvati</h2>
+<turbo-frame id="user-courses" target="_top">
   <% if current_user.courses.any? %>
     <ul>
       <% current_user.courses.each do |course| %>
-        <li><%= course.name %></li>
+        <li><%= course.name %> <%= link_to "Rimuovi", course_path(course), data: { turbo_method: :delete } %></li>
       <% end %>
     </ul>
+  <% else %>
+    <p>Non hai salvato nessun corso</p>
   <% end %>
 </turbo-frame>
 <!-- search form -->
@@ -28,12 +30,16 @@
           <%= course.name %>
           <form action="<%= courses_path %>" method="post">
             <%= hidden_field_tag :course_id, course.id %>
-            <%= submit_tag "Partecipa" %>
+            <%= submit_tag "Salva Corso" %>
           </form>
         </li>
       <% end %>
     </ul>
   <% else %>
-    <p>Nessun corso trovato...</p>
+    <% if params[:search].present? %>
+      <p>Nessun corso trovato...</p>
+    <% else %>
+      <p>Cerca qualche corso per salvarlo</p>
+    <% end %>
   <% end %>
 </turbo-frame>
