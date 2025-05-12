@@ -1,0 +1,9 @@
+@layer base {
+    body {
+        background-image: url('pattern.svg');
+        background-position: center;
+        background-repeat: repeat;
+        background-color: rgba(255, 255, 255, 0.90);
+        background-blend-mode: overlay;
+    }
+}
