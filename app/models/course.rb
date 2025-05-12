@@ -130,18 +130,25 @@ class Course < ApplicationRecord
 
   def create_exams
     fetched_exams = fetch_exams
-    fetched_exams["Insegnamenti"]["Appelli"].each do |exam|
-      exams.find_or_initialize_by(server_id: exam["event_id"]).tap do |e|
-        e.name = exam["nome"]
-        e.teacher = exam["event_docenti"][0]["Nome"] + " " + exam["event_docenti"][0]["Cognome"]
-        e.site = exam["Sede"]
-        e.room = exam["Aula"]
-        e.date = exam["Data"]
-        e.start_time = exam["OraInizio"]
-        e.end_time = exam["OraFine"]
-        e.professor_email = exam["event_docenti"][0]["Mail"]
-        e.course = self
-        e.save!
+    if fetched_exams["Insegnamenti"].present?
+      Rails.logger.info("Fetched exams: #{fetched_exams["Insegnamenti"]}")
+      # Get the first course code from Insegnamenti hash
+      course_code = fetched_exams["Insegnamenti"].keys.first
+      if course_code && fetched_exams["Insegnamenti"][course_code]["Appelli"].present?
+        fetched_exams["Insegnamenti"][course_code]["Appelli"].each do |exam|
+          exams.find_or_initialize_by(server_id: exam["event_id"]).tap do |e|
+            e.name = exam["nome"]
+            e.teacher = exam["event_docenti"][0]["Nome"] + " " + exam["event_docenti"][0]["Cognome"]
+            e.site = exam["Sede"]
+            e.room = exam["Aula"]
+            e.date = exam["Data"]
+            e.start_time = exam["OraInizio"]
+            e.end_time = exam["OraFine"]
+            e.professor_email = exam["event_docenti"][0]["Mail"]
+            e.course = self
+            e.save!
+          end
+        end
       end
     end
   end
