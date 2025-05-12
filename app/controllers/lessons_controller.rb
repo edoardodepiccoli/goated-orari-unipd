@@ -1,4 +1,6 @@
 class LessonsController < ApplicationController
+  before_action :authenticate_user!
+
   def index
     @courses = current_user.courses
     @lessons = Lesson.where(course_id: @courses.pluck(:id))
