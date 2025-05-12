@@ -10,7 +10,11 @@ class LessonsController < ApplicationController
     @lessons_by_date = lessons.group_by { |lesson| lesson.date }
 
     unless lessons.any?
-      redirect_to courses_path, alert: "Nessuna lezione trovata per i tuoi corsi. Meglio così AHAHAH!"
+      if current_user.courses.any?
+        redirect_to courses_path, alert: "Nessuna lezione trovata per i tuoi corsi. Meglio così AHAHAH!"
+      else
+        redirect_to courses_path, alert: "Nessun corso aggiunto. Aggiungi almeno un corso per vedere le lezioni."
+      end
     end
   end
 end
