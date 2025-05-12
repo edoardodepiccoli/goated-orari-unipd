@@ -1,6 +1,26 @@
 <h1>Lezioni</h1>
 <ul>
   <% @lessons.each do |lesson| %>
-    <li><%= lesson.datetime %></li>
+    <li>
+      <div>
+        <%= lesson.course.name %>
+      </div>
+      <div>
+        <%= lesson.date.strftime("%A %d %B") %>
+      </div>
+      <div>
+        <%= lesson.start_time.strftime("%H:%M") %> - <%= lesson.end_time.strftime("%H:%M") %>
+      </div>
+      <div>
+        <% if lesson.teacher.present? %>
+          <%= lesson.teacher %>
+        <% else %>
+          <%= "Docente non disponibile" %>
+        <% end %>
+      </div>
+      <div>
+        <%= lesson.room %>
+      </div>
+    </li>
   <% end %>
 </ul>

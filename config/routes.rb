@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   devise_for :users
 
   # courses routes
-  resources :courses, only: [:index, :create]
+  resources :courses, only: [:index, :create, :destroy]
   resources :lessons, only: [:index]
 
   # rails health check
