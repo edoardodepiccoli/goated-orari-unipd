@@ -11,6 +11,8 @@ class Course < ApplicationRecord
 
   has_many :lessons
 
+  scope :with_users, -> { joins(:users).distinct }
+
   def self.fetch_courses
     url = URI("https://agendastudentiunipd.easystaff.it/combo.php?sw=ec_&aa=2024&page=attivita")
     response = Net::HTTP.get(url)
@@ -28,7 +30,7 @@ class Course < ApplicationRecord
     end
   end
 
-  def fetch_lessons
+  def fetch_lessons(date)
     url = URI("https://agendastudentiunipd.easystaff.it/grid_call.php")
     Rails.logger.info("Fetching lessons for course: #{code}")
     payload = {
@@ -39,7 +41,7 @@ class Course < ApplicationRecord
       "attivita[]" => [code],
       "visualizzazione_orario" => "cal",
       "periodo_didattico" => "",
-      "date" => "11-05-2025",
+      "date" => date,
       "_lang" => "en",
       "week_grid_type" => "-1",
       "col_cells" => "0",
@@ -53,5 +55,31 @@ class Course < ApplicationRecord
 
     response = Net::HTTP.post_form(url, payload)
     JSON.parse(response.body)["celle"]
+  end
+
+  def create_lessons
+    return if lessons.any?
+
+    lessons.delete_all
+
+    current_week_data = fetch_lessons(Time.now.strftime("%d-%m-%Y"))
+    next_week_data = fetch_lessons((Time.now + 7.days).strftime("%d-%m-%Y"))
+    lessons_data = current_week_data + next_week_data
+
+    return if lessons_data.empty?
+
+    lessons_data.each do |lesson|
+      Lesson.create!(
+        server_id: lesson["id"],
+        teacher: lesson["docente"],
+        room: lesson["aula"],
+        date: lesson["data"],
+        start_time: lesson["ora_inizio"],
+        end_time: lesson["ora_fine"],
+        course: self,
+      )
+    end
+
+    self.touch
   end
 end

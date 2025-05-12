@@ -1,5 +1,6 @@
 class CoursesController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_course, only: [:destroy]
 
   def index
     if params[:search].present?
@@ -10,6 +11,7 @@ class CoursesController < ApplicationController
         *search_terms.map { |term| "%#{term}%" }
       )
     else
+      # @courses = Course.order("RANDOM()").limit(10)
       @courses = []
     end
   end
@@ -24,37 +26,26 @@ class CoursesController < ApplicationController
       return
     end
 
-    Rails.logger.info("Course: #{@course.inspect}")
-
-    unless @course.users.any? || @course.lessons.any?
-      begin
-        # fetch lessons
-        lessons = @course.fetch_lessons
-        Rails.logger.info("Lessons: #{lessons}")
-
-        if lessons.any?
-          # build lessons
-          lessons.each do |lesson|
-            Lesson.create!(
-              server_id: lesson["id"],
-              teacher: lesson["docente"],
-              room: lesson["aula"],
-              start_time: lesson["ora_inizio"],
-              end_time: lesson["ora_fine"],
-              course: @course,
-            )
-          end
-        else
-          flash[:alert] = "Nessuna lezione trovata per questo corso"
-        end
-      rescue => e
-        Rails.logger.error("Error fetching lessons: #{e.message}")
-        redirect_to courses_path, alert: "Errore durante il recupero delle lezioni: #{e.message}"
-        return
-      end
+    unless @course.lessons.any?
+      @course.create_lessons
     end
 
     current_user.courses << @course
     redirect_to courses_path, notice: "Corso aggiunto"
+  end
+
+  def destroy
+    if current_user.courses.include?(@course)
+      current_user.courses.delete(@course)
+      redirect_to courses_path, notice: "Corso rimosso"
+    else
+      redirect_to courses_path, alert: "Hai già rimosso questo corso"
+    end
+  end
+
+  private
+
+  def set_course
+    @course = Course.find(params[:id])
   end
 end
