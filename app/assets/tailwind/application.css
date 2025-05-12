@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-body {
+/* body {
     @apply p-6 text-gray-900 bg-white;
 }
 
@@ -29,4 +29,4 @@ input,
 select,
 textarea {
     @apply w-full p-2 mb-4 border border-gray-300 rounded;
-}
+} */

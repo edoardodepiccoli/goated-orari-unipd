@@ -18,21 +18,22 @@
     <%= javascript_importmap_tags %>
   </head>
   <body>
-    <nav>
-      <div>
-        <%= link_to "Lezioni", lessons_path %>
-        <%= link_to "Corsi", courses_path %>
-      </div>
-      <div>
-        <% if user_signed_in? %>
-          <%= link_to "Logout", destroy_user_session_path, data: { turbo_method: :delete } %>
-        <% else %>
-          <%= link_to "Signup", new_user_registration_path %>
-          <%= link_to "Login", new_user_session_path %>
-        <% end %>
+    <nav class="p-4 bg-gray-100 border-b-4 border-black ">
+      <div class="flex items-center justify-between max-w-screen-md mx-auto">
+        <div class="space-x-2">
+          <%= link_to "Lezioni", lessons_path, class: "inline-block font-bold text-black px-4 py-2 rounded-sm bg-[#9B1C12] text-white border-2 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-150" %>
+          <%= link_to "Corsi", courses_path, class: "inline-block font-bold text-black px-4 py-2 rounded-sm bg-[#9B1C12] text-white border-2 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-150" %>
+        </div>
+        <div class="space-x-2">
+          <% if user_signed_in? %>
+            <%= link_to "Esci", destroy_user_session_path, data: { turbo_method: :delete } %>
+          <% else %>
+            <%= link_to "Iscriviti/Accedi", new_user_registration_path %>
+          <% end %>
+        </div>
       </div>
     </nav>
-    <main>
+    <main class="max-w-screen-md p-4 mx-auto">
       <% flash.each do |key, message| %>
         <%= content_tag :div, message, class: "flash #{key}" %>
       <% end %>
