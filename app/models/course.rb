@@ -71,6 +71,7 @@ class Course < ApplicationRecord
     lessons_data.each do |lesson|
       Lesson.create!(
         server_id: lesson["id"],
+        name: lesson["name_original"],
         teacher: lesson["docente"],
         room: lesson["aula"],
         date: lesson["data"],
