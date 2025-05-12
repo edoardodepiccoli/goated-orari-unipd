@@ -17,8 +17,8 @@
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
-  <body>
-    <nav class="p-4 bg-gray-100 border-b-4 border-black ">
+  <body class="flex flex-col justify-start min-h-screen">
+    <nav class="p-4 bg-gray-100 border-b-4 border-black">
       <div class="flex items-center justify-between max-w-screen-md mx-auto">
         <div class="space-x-2">
           <% if params[:controller] == "lessons" %>
@@ -43,37 +43,42 @@
         </div>
       </div>
     </nav>
-    <main class="max-w-screen-md p-4 mx-auto">
-      <% flash.each do |key, message| %>
-        <% if key == "alert" %>
-          <div class="flex items-center gap-2 px-4 py-3 mb-4 text-sm border-2 rounded-sm border-amber-500 bg-amber-50">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="12" y1="8" x2="12" y2="12"></line>
-              <line x1="12" y1="16" x2="12.01" y2="16"></line>
-            </svg>
-            <span class="text-amber-700"><%= message %></span>
-          </div>
-        <% elsif key == "notice" %>
-          <div class="flex items-center gap-2 px-4 py-3 mb-4 text-sm border-2 rounded-sm border-emerald-500 bg-emerald-50">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-              <polyline points="22 4 12 14.01 9 11.01"></polyline>
-            </svg>
-            <span class="text-emerald-700"><%= message %></span>
-          </div>
-        <% elsif key == "error" %>
-          <div class="flex items-center gap-2 px-4 py-3 mb-4 text-sm border-2 border-[#9B1C12] bg-[#9B1C12]/5 rounded-sm">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[#9B1C12]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="15" y1="9" x2="9" y2="15"></line>
-              <line x1="9" y1="9" x2="15" y2="15"></line>
-            </svg>
-            <span class="text-[#9B1C12]"><%= message %></span>
-          </div>
+    <main class="flex-grow w-full my-8 shrink-0">
+      <div class="max-w-screen-md p-4 mx-auto">
+        <% flash.each do |key, message| %>
+          <% if key == "alert" %>
+            <div class="flex items-center gap-2 px-4 py-3 mb-4 text-sm border-2 rounded-sm border-amber-500 bg-amber-50">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+              <span class="text-amber-700"><%= message %></span>
+            </div>
+          <% elsif key == "notice" %>
+            <div class="flex items-center gap-2 px-4 py-3 mb-4 text-sm border-2 rounded-sm border-emerald-500 bg-emerald-50">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+              <span class="text-emerald-700"><%= message %></span>
+            </div>
+          <% elsif key == "error" %>
+            <div class="flex items-center gap-2 px-4 py-3 mb-4 text-sm border-2 border-[#9B1C12] bg-[#9B1C12]/5 rounded-sm">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[#9B1C12]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="15" y1="9" x2="9" y2="15"></line>
+                <line x1="9" y1="9" x2="15" y2="15"></line>
+              </svg>
+              <span class="text-[#9B1C12]"><%= message %></span>
+            </div>
+          <% end %>
         <% end %>
-      <% end %>
-      <%= yield %>
+        <%= yield %>
+      </div>
     </main>
+    <div class="p-4 mt-auto bg-gray-100 border-t-4 border-black">
+      <p class="text-sm text-center">Un'app (non ufficiale) di <a href="https://www.instagram.com/_edoardodepiccoli_" class="text-[#9B1C12] underline">@_edoardodepiccoli_</a></p>
+    </div>
   </body>
 </html>
