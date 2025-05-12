@@ -55,12 +55,12 @@
             <span class="text-amber-700"><%= message %></span>
           </div>
         <% elsif key == "notice" %>
-          <div class="flex items-center gap-2 px-4 py-3 mb-4 text-sm border-2 border-black rounded-sm bg-black/5">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <div class="flex items-center gap-2 px-4 py-3 mb-4 text-sm border-2 rounded-sm border-emerald-500 bg-emerald-50">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
               <polyline points="22 4 12 14.01 9 11.01"></polyline>
             </svg>
-            <span><%= message %></span>
+            <span class="text-emerald-700"><%= message %></span>
           </div>
         <% elsif key == "error" %>
           <div class="flex items-center gap-2 px-4 py-3 mb-4 text-sm border-2 border-[#9B1C12] bg-[#9B1C12]/5 rounded-sm">
