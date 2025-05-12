@@ -6,4 +6,6 @@ class User < ApplicationRecord
 
   has_many :attendances
   has_many :courses, through: :attendances
+
+  has_many :lessons, through: :courses
 end
