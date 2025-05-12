@@ -68,8 +68,8 @@ class Course < ApplicationRecord
       "et_er" => "1",
       "text_ins" => name,
       "esami_insegnamento" => exam_course_codes.pluck(:code).join(","),
-      "datefrom" => "12-05-2025",
-      "dateto" => "10-08-2025",
+      "datefrom" => (Time.now + 7.days).strftime("%d-%m-%Y"),
+      "dateto" => (Time.now + 120.days).strftime("%d-%m-%Y"),
       "_lang" => "it",
       "list" => "",
       "week_grid_type" => "-1",
@@ -130,23 +130,24 @@ class Course < ApplicationRecord
 
   def create_exams
     fetched_exams = fetch_exams
+    Rails.logger.info("Fetched exams: #{fetched_exams}")
     if fetched_exams["Insegnamenti"].present?
       Rails.logger.info("Fetched exams: #{fetched_exams["Insegnamenti"]}")
-      # Get the first course code from Insegnamenti hash
-      course_code = fetched_exams["Insegnamenti"].keys.first
-      if course_code && fetched_exams["Insegnamenti"][course_code]["Appelli"].present?
-        fetched_exams["Insegnamenti"][course_code]["Appelli"].each do |exam|
-          exams.find_or_initialize_by(server_id: exam["event_id"]).tap do |e|
-            e.name = exam["nome"]
-            e.teacher = exam["event_docenti"][0]["Nome"] + " " + exam["event_docenti"][0]["Cognome"]
-            e.site = exam["Sede"]
-            e.room = exam["Aula"]
-            e.date = exam["Data"]
-            e.start_time = exam["OraInizio"]
-            e.end_time = exam["OraFine"]
-            e.professor_email = exam["event_docenti"][0]["Mail"]
-            e.course = self
-            e.save!
+      fetched_exams["Insegnamenti"].each do |course_code, course_data|
+        if course_data["Appelli"].present?
+          course_data["Appelli"].each do |exam|
+            exams.find_or_initialize_by(server_id: exam["event_id"]).tap do |e|
+              e.name = exam["nome"]
+              e.teacher = exam["event_docenti"][0]["Nome"] + " " + exam["event_docenti"][0]["Cognome"]
+              e.site = exam["Sede"]
+              e.room = exam["Aula"]
+              e.date = exam["Data"]
+              e.start_time = exam["OraInizio"]
+              e.end_time = exam["OraFine"]
+              e.professor_email = exam["event_docenti"][0]["Mail"]
+              e.course = self
+              e.save!
+            end
           end
         end
       end
