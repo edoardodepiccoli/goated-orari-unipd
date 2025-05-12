@@ -15,7 +15,7 @@
         <% lessons.each do |lesson| %>
           <li class="flex flex-col gap-2 px-4 py-4 border-2 border-black rounded-sm shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
             <div class="font-medium"><%= lesson.course.name.split(" - ").first %></div>
-            <!--<div class="text-sm text-gray-600"><%#= lesson.course.name %></div>-->
+            <div class="text-sm text-gray-600 mt-[-4px]"><%= lesson.name %></div>
             <div class="flex flex-col gap-1 mt-1">
               <div class="flex items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
