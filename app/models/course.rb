@@ -19,14 +19,14 @@ class Course < ApplicationRecord
   def self.fetch_courses
     url = URI("https://agendastudentiunipd.easystaff.it/combo.php?sw=ec_&aa=2024&page=attivita")
     response = Net::HTTP.get(url)
-    json_string = response.sub(/^var elenco_attivita =\s*/, "").sub(/;$/, "")
+    json_string = response.sub(/^var elenco_attivita =\s*/, "").sub(/;$/, "") # this is because the response is a js variable assignment (yeah... i know)
     JSON.parse(json_string)
   end
 
   def self.fetch_codes
     url = URI("https://agendastudentiunipd.easystaff.it/combo.php?sw=et_&page=insegnamento")
     response = Net::HTTP.get(url)
-    json_string = response.sub(/^var esami_insegnamento =\s*/, "").sub(/;$/, "")
+    json_string = response.sub(/^var esami_insegnamento =\s*/, "").sub(/;$/, "") # same as above
     JSON.parse(json_string)
   end
 
@@ -99,7 +99,7 @@ class Course < ApplicationRecord
     fetched_codes = fetch_codes
     courses = Course.all
     courses.each do |course|
-      fetched_codes.select { |record| record["label"] == course.name }.each do |record|
+      fetched_codes.select { |record| record["label"].downcase == course.name.downcase }.each do |record|
         course.exam_course_codes.create!(code: record["valore"])
       end
     end
