@@ -10,9 +10,6 @@ class Course < ApplicationRecord
   has_many :users, through: :attendances
 
   has_many :lessons
-  has_many :exams
-
-  has_many :exam_course_codes
 
   scope :with_users, -> { joins(:users).distinct }
 
@@ -20,13 +17,6 @@ class Course < ApplicationRecord
     url = URI("https://agendastudentiunipd.easystaff.it/combo.php?sw=ec_&aa=2024&page=attivita")
     response = Net::HTTP.get(url)
     json_string = response.sub(/^var elenco_attivita =\s*/, "").sub(/;$/, "") # this is because the response is a js variable assignment (yeah... i know)
-    JSON.parse(json_string)
-  end
-
-  def self.fetch_codes
-    url = URI("https://agendastudentiunipd.easystaff.it/combo.php?sw=et_&page=insegnamento")
-    response = Net::HTTP.get(url)
-    json_string = response.sub(/^var esami_insegnamento =\s*/, "").sub(/;$/, "") # same as above
     JSON.parse(json_string)
   end
 
@@ -57,35 +47,6 @@ class Course < ApplicationRecord
     JSON.parse(response.body)["celle"]
   end
 
-  def fetch_exams
-    url = URI("https://agendastudentiunipd.easystaff.it/test_call.php")
-    Rails.logger.info("Fetching exams for course: #{code}")
-
-    payload = {
-      "view" => "easytest",
-      "form-type" => "et_insegnamento",
-      "include" => "et_insegnamento",
-      "et_er" => "1",
-      "text_ins" => name,
-      "esami_insegnamento" => exam_course_codes.pluck(:code).join(","),
-      "datefrom" => (Time.now + 7.days).strftime("%d-%m-%Y"),
-      "dateto" => (Time.now + 120.days).strftime("%d-%m-%Y"),
-      "_lang" => "it",
-      "list" => "",
-      "week_grid_type" => "-1",
-      "ar_codes_" => "",
-      "ar_select_" => "",
-      "col_cells" => "0",
-      "empty_box" => "0",
-      "only_grid" => "0",
-      "highlighted_date" => "0",
-      "all_events" => "0",
-    }
-
-    response = Net::HTTP.post_form(url, payload)
-    JSON.parse(response.body)
-  end
-
   # should run this method rarely, like once a week or so
   def self.sync!
     fetched_courses = fetch_courses
@@ -93,14 +54,6 @@ class Course < ApplicationRecord
       find_or_initialize_by(code: course["valore"]).tap do |c|
         c.name = course["label"]
         c.save!
-      end
-    end
-
-    fetched_codes = fetch_codes
-    courses = Course.all
-    courses.each do |course|
-      fetched_codes.select { |record| record["label"].downcase == course.name.downcase }.each do |record|
-        course.exam_course_codes.create!(code: record["valore"])
       end
     end
   end
@@ -126,31 +79,5 @@ class Course < ApplicationRecord
     end
 
     self.touch
-  end
-
-  def create_exams
-    fetched_exams = fetch_exams
-    Rails.logger.info("Fetched exams: #{fetched_exams}")
-    if fetched_exams["Insegnamenti"].present?
-      Rails.logger.info("Fetched exams: #{fetched_exams["Insegnamenti"]}")
-      fetched_exams["Insegnamenti"].each do |course_code, course_data|
-        if course_data["Appelli"].present?
-          course_data["Appelli"].each do |exam|
-            exams.find_or_initialize_by(server_id: exam["event_id"]).tap do |e|
-              e.name = exam["nome"]
-              e.teacher = exam["event_docenti"][0]["Nome"] + " " + exam["event_docenti"][0]["Cognome"]
-              e.site = exam["Sede"]
-              e.room = exam["Aula"]
-              e.date = exam["Data"]
-              e.start_time = exam["OraInizio"]
-              e.end_time = exam["OraFine"]
-              e.professor_email = exam["event_docenti"][0]["Mail"]
-              e.course = self
-              e.save!
-            end
-          end
-        end
-      end
-    end
   end
 end
